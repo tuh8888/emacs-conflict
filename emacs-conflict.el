@@ -58,14 +58,18 @@
   :prefix "emacs-conflict")
 
 (defcustom emacs-conflict-find-regexes
-  '(("syncthing" ((:from-conflict-regexp "\\.sync-conflict-.*\\(\\.\\)")
+  `(("syncthing" ((:from-conflict-regexp "\\.sync-conflict-.*\\(\\.\\)")
                   (:from-conflict "\\1")
                   (:to-conflict-regexp "\\.[^.]+$")
                   (:to-conflict (lambda (s) (concat ".sync-conflict-" s)))))
     ("nextcloud" ((:from-conflict-regexp " (conflicted copy .*)\\(\\.\\)")
                   (:from-conflict "\\1")))
     ("pacman" ((:from-conflict-regexp "\\(?:\\.\\)pacnew$")
-               (:from-conflict ""))))
+               (:from-conflict "")))
+    ("Dropbox" ((:from-conflict-regexp
+                 ;; ,(rxt-pcre-to-elisp " \\(conflict \\d{4}(-\\d{2}){5}\\)")
+                 " (conflict [[:digit:]]\\{4\\}\\(-[[:digit:]]\\{2\\}\\)\\{5\\})")
+                (:from-conflict ""))))
   "Regexes to identify a file as a conflict."
   :type '(alist :key-type string :value-type (alist :key-type keyword :value-type (or regexp functionp)))
   :group 'conflict)
